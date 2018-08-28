@@ -14,11 +14,11 @@ router.get('/',(req,res)=>{
 
 
 router.get('/:hash',(req,res)=>{
-    let Original_url=req.params.Original_url;
-    shortUrl.findOne(Original_url)
+    let hash=req.params.hash;
+    shortUrl.findOne({hashed_url:hash})
     .then((shorts)=>{
         
-        res.send(shorts.hashed_url);
+        res.send(shorts.Original_url);
     }).catch((err)=>{
         res.send(err);
     })

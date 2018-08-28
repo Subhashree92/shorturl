@@ -1,5 +1,6 @@
 const mongoose=require('mongoose');
 const Schema=mongoose.Schema;
+const shorthash=require('shorthash');
 const ShortSchema=new Schema({
  title:{
      type:String,
@@ -11,8 +12,8 @@ const ShortSchema=new Schema({
  },
  Tags:[String],
  hashed_url:{
-     type:String,
-     required:true
+     type:String
+     
  },
  createdAt:{
     type:Date,
@@ -20,8 +21,16 @@ const ShortSchema=new Schema({
  }
  
 });
+ShortSchema.pre('save',function(next){
+if(!this.hashed_url){
+this.hashed_url=shorthash.unique(`${this.Original_url}`);
+}
+next();
+})
+
 
 const shortUrl=mongoose.model('hashurl',ShortSchema);
+
 module.exports={
     shortUrl
 }
